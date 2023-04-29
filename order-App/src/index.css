@@ -1,0 +1,66 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+
+.LoginImageSection{
+  background-repeat: no-repeat;
+  background-image:  url(../src/Images/login-7.webp);
+  background-position: center;
+  background-color: white; 
+  background-size: 100% 95%;
+}
+
+/* .AppBarStyle{
+  background-color:darkgray !important; 
+} */
+
+.AppBarStyle{
+  background-color: #F7FAF9 !important; 
+}
+.companyName{
+  /* color: #0A7B55; */
+  color: #1976d2;
+  font-size: 1.8rem !important;
+  font-weight: bold !important;
+  margin: 0;
+  font-family: "Times New Roman", Times, serif !important;
+
+}
+.loginImgCss{
+  width: 10%;
+  height: 10%;
+  padding-right: 2%;
+}
+/* .MuiSvgIcon-root{
+  color: black;
+} */
+.MuiSvgIcon-root{
+  color: #1976d2;
+} 
+
+.add-form{
+  border-radius: 15px;
+  background-color: #F7FAF9;
+  padding: 10px;  
+}
+
+.buttonDiv{
+  margin-left: 320px;
+}
+
+.userName{
+  color: #1976d2;
+  padding: 0% 2% 0% 0%;
+
+}
