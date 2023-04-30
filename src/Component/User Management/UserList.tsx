@@ -1,17 +1,15 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography,IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
 import { User } from "../../Interface/User";
 import { AppSettings } from "../../AppSettings";
 import AppHelper from "../../Helper/AppHelper";
-
+import LockResetIcon from "@mui/icons-material/LockReset";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
  
-
-
-
 
 export default function ListUser() {
   const navigate = useNavigate();
@@ -74,16 +72,27 @@ const columns: GridColDef[] = [
         return;
       };
 
+      const onClickResetPws = () => {
+        navigate("/ResetPassword?id=" + params.row["id"]);
+        return;
+      };
+
       return (
         <Stack direction="row" spacing={2}>
-          <Button
+          {/* <Button
             variant="outlined"
             color="warning"
             size="small"
             onClick={onClick}
           >
             Edit
-          </Button>
+          </Button> */}
+               <IconButton color="primary" title="Edit" size="small">
+                <BorderColorIcon onClick={onClick} />
+              </IconButton>
+          <IconButton color="primary" title="Reset password">
+                <LockResetIcon onClick={onClickResetPws} />
+              </IconButton>
         </Stack>
       );
     },
@@ -107,9 +116,8 @@ const columns: GridColDef[] = [
     editable: true,
   },
   {
-    field: "PhoneNumber",
+    field: "phoneNumber",
     headerName: "Phone Number",
-    type: "number",
     width: 180,
     editable: true,
   },
@@ -171,13 +179,11 @@ const columns: GridColDef[] = [
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 5,
+                pageSize: 10,
               },
             },
           }}
-          pageSizeOptions={[5]}
-          checkboxSelection
-          disableRowSelectionOnClick
+          pageSizeOptions={[10]}
         />
       </Box>
     </>

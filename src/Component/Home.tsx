@@ -94,6 +94,11 @@ function LogOut(){
   window.location.href = "/";
 }
 
+
+function PasswordReset(){
+  var resetpage = "/ResetPassword?id=" +  AppHelper.getUser().id.toString();
+  navigate(resetpage)
+}
 const useEffectCount = React.useRef(true);
 React.useEffect(() => {
  
@@ -196,6 +201,14 @@ React.useEffect(() => {
               </ListItemButton>
             </ListItem>
           ))}
+            <ListItem key="logOut" disablePadding>
+              <ListItemButton onClick={() => PasswordReset()}>
+                <ListItemIcon>
+                  <LogoutIcon></LogoutIcon>
+                </ListItemIcon>
+                <ListItemText primary="Reset Password" />
+              </ListItemButton>
+            </ListItem>
   <ListItem key="logOut" disablePadding>
               <ListItemButton onClick={() => LogOut()}>
                 <ListItemIcon>

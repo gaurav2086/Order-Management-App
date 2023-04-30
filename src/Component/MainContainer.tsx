@@ -9,6 +9,7 @@ import AddEditOrder from "./Orders/AddEditOrder";
 import OrderList from "./Orders/OrderList";
 import ViewOrder from "./Orders/ViewOrder";
 import AddEditUser from "./User Management/AddEditUser";
+import ResetPassword from "./User Management/ResetPassword";
 import UserList from "./User Management/UserList";
 
 function MainContainer() {
@@ -18,6 +19,7 @@ function MainContainer() {
       <Route path="/Login" element={<Login></Login>}></Route>
       <Route path="/UserList" element={<UserList></UserList>}></Route>
       <Route path="/AddEditUser" element={<AddEditUser></AddEditUser>}></Route>
+      <Route path="/ResetPassword" element={<ResetPassword></ResetPassword>}></Route>
       <Route path="/OrderList" element={<OrderList></OrderList>}></Route>
       <Route path="/ViewOrder" element={<ViewOrder></ViewOrder>}></Route>
       <Route path="/LogoReview" element={<LogoReview></LogoReview>}></Route>
