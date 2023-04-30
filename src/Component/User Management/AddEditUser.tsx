@@ -433,10 +433,10 @@ export default function AddEditUser() {
                     <MenuItem value="">
                       <em>Select</em>
                     </MenuItem>
-                    <MenuItem value="Admin">Admin</MenuItem>
-                    <MenuItem value="Sales">Sales Employee</MenuItem>
-                    <MenuItem value="Operation">Operation</MenuItem>
-                    <MenuItem value="Inventory Manager">
+                    <MenuItem value="1">Admin</MenuItem>
+                    <MenuItem value="2">Sales Employee</MenuItem>
+                    <MenuItem value="3">Operation</MenuItem>
+                    <MenuItem value="4">
                       Inventory Manager
                     </MenuItem>
                   </Select>

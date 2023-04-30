@@ -201,12 +201,12 @@ React.useEffect(() => {
               </ListItemButton>
             </ListItem>
           ))}
-            <ListItem key="logOut" disablePadding>
+            <ListItem key="pwsreset" disablePadding>
               <ListItemButton onClick={() => PasswordReset()}>
                 <ListItemIcon>
                   <LogoutIcon></LogoutIcon>
                 </ListItemIcon>
-                <ListItemText primary="Reset Password" />
+                <ListItemText primary="Reset Password" ></ListItemText>
               </ListItemButton>
             </ListItem>
   <ListItem key="logOut" disablePadding>
@@ -214,7 +214,7 @@ React.useEffect(() => {
                 <ListItemIcon>
                   <LogoutIcon></LogoutIcon>
                 </ListItemIcon>
-                <ListItemText primary="LogOut" />
+                <ListItemText primary="LogOut" ></ListItemText>
               </ListItemButton>
             </ListItem>
 

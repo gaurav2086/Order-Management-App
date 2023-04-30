@@ -78,20 +78,12 @@ const columns: GridColDef[] = [
       };
 
       return (
-        <Stack direction="row" spacing={2}>
-          {/* <Button
-            variant="outlined"
-            color="warning"
-            size="small"
-            onClick={onClick}
-          >
-            Edit
-          </Button> */}
-               <IconButton color="primary" title="Edit" size="small">
-                <BorderColorIcon onClick={onClick} />
+        <Stack direction="row" spacing={2}>     
+               <IconButton color="primary" title="Edit" size="small" onClick={onClick}>
+                <BorderColorIcon  />
               </IconButton>
-          <IconButton color="primary" title="Reset password">
-                <LockResetIcon onClick={onClickResetPws} />
+          <IconButton color="primary" title="Reset password" onClick={onClickResetPws}>
+                <LockResetIcon  />
               </IconButton>
         </Stack>
       );

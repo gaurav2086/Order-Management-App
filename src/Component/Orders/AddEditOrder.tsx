@@ -251,7 +251,7 @@ export default function AddEditOrder() {
                   id="details"
                   multiline
                   rows={2}
-                  label="Details"
+                  label="Product Details"
                   onChange={(e) => handleInputChange(e)}
                   name="details"
                   error={formValidation.details}
@@ -261,7 +261,7 @@ export default function AddEditOrder() {
                   autoComplete="family-name"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <TextField
                   required
                   fullWidth
@@ -272,8 +272,7 @@ export default function AddEditOrder() {
                   autoComplete="family-name"
                 />
               </Grid>
-
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <TextField
                   name="BuildNumber"
                   required
@@ -284,8 +283,7 @@ export default function AddEditOrder() {
                   autoFocus
                 />
               </Grid>
-
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <TextField
                   name="amount"
                   required
@@ -315,8 +313,6 @@ export default function AddEditOrder() {
                   }
                   autoFocus
                 />
-
-
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
@@ -336,14 +332,13 @@ export default function AddEditOrder() {
                     <MenuItem value="">
                       <em>Select</em>
                     </MenuItem>
-                    <MenuItem value="1">Open For Review</MenuItem>
-                    <MenuItem value="2">Submit For Approval</MenuItem>
-                    <MenuItem value="3">Open</MenuItem>
-                    <MenuItem value="4">Tender Accepted</MenuItem>
-                    <MenuItem value="5">Payment Awaited</MenuItem>
-                    <MenuItem value="6">In Transit</MenuItem>
-                    <MenuItem value="7">Delivered</MenuItem>
-                    <MenuItem value="8">Close</MenuItem>
+                    <MenuItem value="1">New</MenuItem>
+                    <MenuItem value="2">Submit For Inventory Approval</MenuItem>
+                    <MenuItem value="3">Inventory Approved</MenuItem>
+                    <MenuItem value="4">In progress</MenuItem>
+                    <MenuItem value="5">Delivered</MenuItem>
+                    <MenuItem value="6">Payment Awaited</MenuItem>
+                    <MenuItem value="7">Close</MenuItem>
                   </Select>
                   {formValidation.orderStatus ? (
                     <FormHelperText style={{ color: "#d32f2f" }}>
