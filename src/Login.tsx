@@ -104,7 +104,6 @@ export default function Login() {
     fetch(apiUrl, requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        debugger;
         if (data.errors === undefined) {
           localStorage.setItem("user-info", JSON.stringify(data));
           SaveUserInfo();
@@ -143,7 +142,6 @@ export default function Login() {
 
   const useEffectCount = React.useRef(true);
   React.useEffect(() => {
-    debugger;
     if (useEffectCount.current) {
       useEffectCount.current = false;
       if (localStorage.getItem("user-info") !== null) {

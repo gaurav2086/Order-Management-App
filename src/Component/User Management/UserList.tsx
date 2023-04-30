@@ -123,7 +123,6 @@ const columns: GridColDef[] = [
   {
     field: "isActive",
     headerName: "Active",
-    type: "number",
     width: 110,
     editable: true,
   },

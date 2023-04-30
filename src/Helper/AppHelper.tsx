@@ -2,13 +2,16 @@ import { User } from "../Interface/User";
 
 class AppHelper {
   static isNullorEmpty = (value: any) => {
-    if (value == undefined || value === "" || value.trim().length == 0) {
+    if (value === undefined || value === "" || value === null || value.trim().length === 0) {
       return true;
     }
     return false;
   };
 
   static validateEmail = (email: string) => {
+    
+   if(email === "")
+   return true;  
     return email.match(
       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );

@@ -47,6 +47,7 @@ export default function AddEditUser() {
     createdBy: "",
   });
   const [isChecked, setIsChecked] = React.useState(true);
+  const [isEdit, setIsEdit] = React.useState(false);
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const [alertBoxmsg, setAlertBoxmsg] = React.useState<Message>({
     Type: "",
@@ -86,7 +87,7 @@ export default function AddEditUser() {
   function isValidForm(itemID: string, value: string) {
     let validate = {
       username: AppHelper.isNullorEmpty(userInfo.username),
-      email: AppHelper.isNullorEmpty(userInfo.email),
+      email: false,
       phoneNumber: AppHelper.isNullorEmpty(userInfo.phoneNumber),
       userType: AppHelper.isNullorEmpty(userInfo.userType),
       firstName: AppHelper.isNullorEmpty(userInfo.firstName),
@@ -116,9 +117,9 @@ export default function AddEditUser() {
       }
     }
 
-    if (!AppHelper.validatePassword(userInfo.password || "")) {
-      validate.password = true;
-    }
+    // if (!AppHelper.validatePassword(userInfo.password || "")) {
+    //   validate.password = true;
+    // }
 
     if (pageName !== "Add User") {
       validate.password = false;
@@ -183,7 +184,7 @@ export default function AddEditUser() {
         phoneNumber: userInfo.phoneNumber,
         userType: userInfo.userType,
         isActive: isChecked,
-        createdBy: AppHelper.getUser().username        
+        createdBy: AppHelper.getUser().id.toString()        
       }),
     };
 
@@ -268,6 +269,7 @@ export default function AddEditUser() {
       }
 
       if (query !== undefined || query !== "" || query != null) {
+        setIsEdit(true)
         setPageName("Edit User");
         setOpenloader(true);
         apiUrl = AppSettings.API_URL + "User/GetUserDetails?id=" + query;
@@ -284,7 +286,8 @@ export default function AddEditUser() {
           .then((data) => {
             if (data !== undefined) {
               setUserInfo(data);
-              let user: User = data || " ";            
+              let user: User = data || " ";              
+              setIsChecked(user.isActive || false);  
             }
           })
           .catch((err) => {
@@ -324,10 +327,7 @@ export default function AddEditUser() {
             flexDirection: "column",
             alignItems: "center",
           }}
-        >
-          {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar> */}
+        >   
           <Typography component="h1" variant="h5">
             {pageName}
           </Typography>
@@ -361,14 +361,10 @@ export default function AddEditUser() {
                   id="email"
                   name="email"
                   label="Email"
+                  value={userInfo.email}
                   onChange={(e) => handleInputChange(e)}
                   error={formValidation.email}
-                  helperText={
-                    formValidation.email
-                      ? userInfo.email === ""
-                        ? "Error : Field is required"
-                        : "Error : Invalid email address."
-                      : ""
+                  helperText={ formValidation.email  ?   "Error : Invalid email address.": ""
                   }
                 />
               </Grid>
@@ -394,6 +390,7 @@ export default function AddEditUser() {
                   fullWidth
                   id="lastName"
                   label="Last Name"
+                  value={userInfo.lastName}
                   onChange={(e) => handleInputChange(e)}
                   name="lastName"
                   autoComplete="family-name"
@@ -452,6 +449,7 @@ export default function AddEditUser() {
                   )}
                 </FormControl>
               </Grid>
+              { isEdit === false ? (<> 
               <Grid item xs={12} sm={6}>
                 <TextField
                   name="password"
@@ -465,7 +463,7 @@ export default function AddEditUser() {
                   onChange={(e) => handleInputChange(e)}
                   helperText={
                     formValidation.password
-                      ? userInfo.password == ""
+                      ? userInfo.password === ""
                         ? "Error : Field is required"
                         : "Error : Invalid password.it must contain at least one letter, one number and one special character,  Minimum eight characters."
                       : ""
@@ -486,17 +484,21 @@ export default function AddEditUser() {
                   error={formValidation.confirmPassword}
                   helperText={
                     formValidation.confirmPassword
-                      ? confirmPassword == ""
+                      ? confirmPassword === ""
                         ? "Error : Field is required"
                         : "Error : Confirm password does not match...."
                       : ""
                   }
                 />
-              </Grid>
+              </Grid></>): (
+        <></>
+      )}
+             
+
               <Grid item xs={2}>
                 <FormControlLabel
                   control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
+                    <Checkbox color="primary" checked={isChecked} onChange={handleCheckboxChange} name="isActive"  id="isActive" />
                   }
                   label="Enable"
                 />
