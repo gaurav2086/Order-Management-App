@@ -203,6 +203,63 @@ export default function AddEditOrder() {
                   }
                   autoComplete="family-name"
                 />
+              </Grid>            
+              <Grid item xs={12}>
+                <TextField
+                  name="address"
+                  required
+                  fullWidth
+                  id="address"
+                  label="Address"
+                  multiline
+                  rows={2}
+                  value={orderInfo.address}
+                  error={formValidation.address}
+                  onChange={(e) => handleInputChange(e)}
+                  helperText={
+                    formValidation.address ? "Error : Field is required" : ""
+                  }
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="city"
+                  label="City"
+                  onChange={(e) => handleInputChange(e)}
+                  name="City"
+                  autoComplete="family-name"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  name="state"
+                  required
+                  fullWidth
+                  id="state"
+                  label="State"                 
+                  onChange={(e) => handleInputChange(e)}                
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="details"
+                  multiline
+                  rows={2}
+                  label="Details"
+                  onChange={(e) => handleInputChange(e)}
+                  name="details"
+                  error={formValidation.details}
+                  helperText={
+                    formValidation.details ? "Error : Field is required" : ""
+                  }
+                  autoComplete="family-name"
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -227,41 +284,6 @@ export default function AddEditOrder() {
                   autoFocus
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="address"
-                  required
-                  fullWidth
-                  id="address"
-                  label="Address"
-                  multiline
-                  rows={4}
-                  value={orderInfo.address}
-                  error={formValidation.address}
-                  onChange={(e) => handleInputChange(e)}
-                  helperText={
-                    formValidation.address ? "Error : Field is required" : ""
-                  }
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="details"
-                  multiline
-                  rows={4}
-                  label="Details"
-                  onChange={(e) => handleInputChange(e)}
-                  name="details"
-                  error={formValidation.details}
-                  helperText={
-                    formValidation.details ? "Error : Field is required" : ""
-                  }
-                  autoComplete="family-name"
-                />
-              </Grid>
 
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -269,7 +291,22 @@ export default function AddEditOrder() {
                   required
                   fullWidth
                   id="amount"
-                  label="Amount"
+                  label="Billable Amount "
+                  value={orderInfo.amount}
+                  error={formValidation.amount}
+                  onChange={(e) => handleInputChange(e)}
+                  helperText={
+                    formValidation.amount ? "Error : Field is required" : ""
+                  }
+                  autoFocus
+                />      </Grid>
+ <Grid item xs={12} sm={6}>
+            <TextField
+                  name="amountReceived"
+                  required
+                  fullWidth
+                  id="amountReceived"
+                  label="Amount Received"
                   value={orderInfo.amount}
                   error={formValidation.amount}
                   onChange={(e) => handleInputChange(e)}
@@ -278,6 +315,8 @@ export default function AddEditOrder() {
                   }
                   autoFocus
                 />
+
+
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
