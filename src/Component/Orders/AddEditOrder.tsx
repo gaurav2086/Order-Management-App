@@ -17,12 +17,15 @@ import {
   Select,
   SelectChangeEvent,
   Stack,
+  Tooltip,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 import LabelImportantIcon from "@mui/icons-material/LabelImportant";
 import { Order } from "../../Interface/Order";
 import AppHelper from "../../Helper/AppHelper";
+
+import LibraryAddRoundedIcon from "@mui/icons-material/LibraryAddRounded";
 
 const theme = createTheme();
 
@@ -42,6 +45,34 @@ export default function AddEditOrder() {
     tentativeDate: "",
     createdBy: "",
   });
+  const [products, setProducts] = React.useState([
+
+    { name: "", quantity: "", price: "" },
+
+  ]);
+
+  
+  const addProduct = () => {
+
+    setProducts([...products, { name: "", quantity: "", price: "" }]);
+
+  };
+
+  
+  const handleProductChange = (
+    index: number,
+    event: { target: { name: any; value: any } }
+  ) => {
+    const updatedProducts = [...products];
+    updatedProducts[index] = { ...updatedProducts[index], price: event.target.value };
+    setProducts(updatedProducts);
+    
+  let  ordervalue = orderInfo;
+  ordervalue.amount = event.target.value;
+  setOrderInfo(ordervalue)  
+};
+
+
   const [isChecked, setIsChecked] = React.useState(true);
 
   const [formValidation, setformValidation] = React.useState({
@@ -84,8 +115,8 @@ export default function AddEditOrder() {
       orderStatus: AppHelper.isNullorEmpty(orderInfo.orderStatus),
     };
 
-    if (itemID == "orderStatus") {
-      if (value.trim() == "") {
+    if (itemID === "orderStatus") {
+      if (value.trim() === "") {
         validate.orderStatus = true;
       } else {
         validate.orderStatus = false;
@@ -261,6 +292,59 @@ export default function AddEditOrder() {
                   autoComplete="family-name"
                 />
               </Grid>
+              <Grid item xs={12} sm={12}   className="productAddCls">  <LibraryAddRoundedIcon
+                onClick={() => addProduct()}
+              ></LibraryAddRoundedIcon> </Grid> 
+{/* Start */}
+ {products.map((product, index) => (
+     <Box
+     component="div"
+     sx={{
+       "& > :not(style)": { m: 1, width: "30ch"  },
+     }}
+      className="productCls"  
+     key={index}
+   >
+                <TextField                             
+                  id="product"
+                  label="Product"
+                  value={product.name || ""}
+                  onChange={(e) =>
+                    setProducts([
+                      ...products.slice(0, index),
+                      { ...product, name: e.target.value },
+                      ...products.slice(index + 1),
+                    ])
+                  }
+                  autoComplete="family-name"                
+                /> 
+                
+                <TextField                 
+                  id="quantity"
+                  label="Quantity"
+                  value={product.quantity}
+                  onChange={(e) =>
+                    setProducts([
+                      ...products.slice(0, index),
+                      { ...product, quantity: e.target.value },
+                      ...products.slice(index + 1),
+                    ])
+                  }
+                  autoComplete="family-name"                 
+                /> 
+              <TextField
+                                required
+                                fullWidth                              
+                                id="price"
+                                label="Price"
+                                value={product.price}
+                                onChange={(event) => handleProductChange(index, event)}
+                                autoComplete="family-name"
+                              
+                              />      </Box>             
+ 
+))}           
+            
               <Grid item xs={12} sm={4}>
                 <TextField
                   required
@@ -369,7 +453,7 @@ export default function AddEditOrder() {
               <Grid item xs={2}>
                 <FormControlLabel
                   control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
+                    <Checkbox color="primary" checked={isChecked} onChange={handleCheckboxChange} name="isActive"  id="isActive" />
                   }
                   label="Enable"
                 />
