@@ -17,12 +17,15 @@ import {
   Select,
   SelectChangeEvent,
   Stack,
+  Tooltip,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 import LabelImportantIcon from "@mui/icons-material/LabelImportant";
 import { Order } from "../../Interface/Order";
 import AppHelper from "../../Helper/AppHelper";
+
+import LibraryAddRoundedIcon from "@mui/icons-material/LibraryAddRounded";
 
 const theme = createTheme();
 
@@ -42,6 +45,34 @@ export default function AddEditOrder() {
     tentativeDate: "",
     createdBy: "",
   });
+  const [products, setProducts] = React.useState([
+
+    { name: "", quantity: "", price: "" },
+
+  ]);
+
+  
+  const addProduct = () => {
+
+    setProducts([...products, { name: "", quantity: "", price: "" }]);
+
+  };
+
+  
+  const handleProductChange = (
+    index: number,
+    event: { target: { name: any; value: any } }
+  ) => {
+    const updatedProducts = [...products];
+    updatedProducts[index] = { ...updatedProducts[index], price: event.target.value };
+    setProducts(updatedProducts);
+    
+  let  ordervalue = orderInfo;
+  ordervalue.amount = event.target.value;
+  setOrderInfo(ordervalue)  
+};
+
+
   const [isChecked, setIsChecked] = React.useState(true);
 
   const [formValidation, setformValidation] = React.useState({
@@ -84,8 +115,8 @@ export default function AddEditOrder() {
       orderStatus: AppHelper.isNullorEmpty(orderInfo.orderStatus),
     };
 
-    if (itemID == "orderStatus") {
-      if (value.trim() == "") {
+    if (itemID === "orderStatus") {
+      if (value.trim() === "") {
         validate.orderStatus = true;
       } else {
         validate.orderStatus = false;
@@ -203,8 +234,118 @@ export default function AddEditOrder() {
                   }
                   autoComplete="family-name"
                 />
+              </Grid>            
+              <Grid item xs={12}>
+                <TextField
+                  name="address"
+                  required
+                  fullWidth
+                  id="address"
+                  label="Address"
+                  multiline
+                  rows={2}
+                  value={orderInfo.address}
+                  error={formValidation.address}
+                  onChange={(e) => handleInputChange(e)}
+                  helperText={
+                    formValidation.address ? "Error : Field is required" : ""
+                  }
+                  autoFocus
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="city"
+                  label="City"
+                  onChange={(e) => handleInputChange(e)}
+                  name="City"
+                  autoComplete="family-name"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  name="state"
+                  required
+                  fullWidth
+                  id="state"
+                  label="State"                 
+                  onChange={(e) => handleInputChange(e)}                
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="details"
+                  multiline
+                  rows={2}
+                  label="Product Details"
+                  onChange={(e) => handleInputChange(e)}
+                  name="details"
+                  error={formValidation.details}
+                  helperText={
+                    formValidation.details ? "Error : Field is required" : ""
+                  }
+                  autoComplete="family-name"
+                />
+              </Grid>
+              <Grid item xs={12} sm={12}   className="productAddCls">  <LibraryAddRoundedIcon
+                onClick={() => addProduct()}
+              ></LibraryAddRoundedIcon> </Grid> 
+{/* Start */}
+ {products.map((product, index) => (
+     <Box
+     component="div"
+     sx={{
+       "& > :not(style)": { m: 1, width: "30ch"  },
+     }}
+      className="productCls"  
+     key={index}
+   >
+                <TextField                             
+                  id="product"
+                  label="Product"
+                  value={product.name || ""}
+                  onChange={(e) =>
+                    setProducts([
+                      ...products.slice(0, index),
+                      { ...product, name: e.target.value },
+                      ...products.slice(index + 1),
+                    ])
+                  }
+                  autoComplete="family-name"                
+                /> 
+                
+                <TextField                 
+                  id="quantity"
+                  label="Quantity"
+                  value={product.quantity}
+                  onChange={(e) =>
+                    setProducts([
+                      ...products.slice(0, index),
+                      { ...product, quantity: e.target.value },
+                      ...products.slice(index + 1),
+                    ])
+                  }
+                  autoComplete="family-name"                 
+                /> 
+              <TextField
+                                required
+                                fullWidth                              
+                                id="price"
+                                label="Price"
+                                value={product.price}
+                                onChange={(event) => handleProductChange(index, event)}
+                                autoComplete="family-name"
+                              
+                              />      </Box>             
+ 
+))}           
+            
+              <Grid item xs={12} sm={4}>
                 <TextField
                   required
                   fullWidth
@@ -215,8 +356,7 @@ export default function AddEditOrder() {
                   autoComplete="family-name"
                 />
               </Grid>
-
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <TextField
                   name="BuildNumber"
                   required
@@ -227,49 +367,28 @@ export default function AddEditOrder() {
                   autoFocus
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="address"
-                  required
-                  fullWidth
-                  id="address"
-                  label="Address"
-                  multiline
-                  rows={4}
-                  value={orderInfo.address}
-                  error={formValidation.address}
-                  onChange={(e) => handleInputChange(e)}
-                  helperText={
-                    formValidation.address ? "Error : Field is required" : ""
-                  }
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="details"
-                  multiline
-                  rows={4}
-                  label="Details"
-                  onChange={(e) => handleInputChange(e)}
-                  name="details"
-                  error={formValidation.details}
-                  helperText={
-                    formValidation.details ? "Error : Field is required" : ""
-                  }
-                  autoComplete="family-name"
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <TextField
                   name="amount"
                   required
                   fullWidth
                   id="amount"
-                  label="Amount"
+                  label="Billable Amount "
+                  value={orderInfo.amount}
+                  error={formValidation.amount}
+                  onChange={(e) => handleInputChange(e)}
+                  helperText={
+                    formValidation.amount ? "Error : Field is required" : ""
+                  }
+                  autoFocus
+                />      </Grid>
+ <Grid item xs={12} sm={6}>
+            <TextField
+                  name="amountReceived"
+                  required
+                  fullWidth
+                  id="amountReceived"
+                  label="Amount Received"
                   value={orderInfo.amount}
                   error={formValidation.amount}
                   onChange={(e) => handleInputChange(e)}
@@ -297,14 +416,13 @@ export default function AddEditOrder() {
                     <MenuItem value="">
                       <em>Select</em>
                     </MenuItem>
-                    <MenuItem value="1">Open For Review</MenuItem>
-                    <MenuItem value="2">Submit For Approval</MenuItem>
-                    <MenuItem value="3">Open</MenuItem>
-                    <MenuItem value="4">Tender Accepted</MenuItem>
-                    <MenuItem value="5">Payment Awaited</MenuItem>
-                    <MenuItem value="6">In Transit</MenuItem>
-                    <MenuItem value="7">Delivered</MenuItem>
-                    <MenuItem value="8">Close</MenuItem>
+                    <MenuItem value="1">New</MenuItem>
+                    <MenuItem value="2">Submit For Inventory Approval</MenuItem>
+                    <MenuItem value="3">Inventory Approved</MenuItem>
+                    <MenuItem value="4">In progress</MenuItem>
+                    <MenuItem value="5">Delivered</MenuItem>
+                    <MenuItem value="6">Payment Awaited</MenuItem>
+                    <MenuItem value="7">Close</MenuItem>
                   </Select>
                   {formValidation.orderStatus ? (
                     <FormHelperText style={{ color: "#d32f2f" }}>
@@ -335,7 +453,7 @@ export default function AddEditOrder() {
               <Grid item xs={2}>
                 <FormControlLabel
                   control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
+                    <Checkbox color="primary" checked={isChecked} onChange={handleCheckboxChange} name="isActive"  id="isActive" />
                   }
                   label="Enable"
                 />
