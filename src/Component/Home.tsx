@@ -89,6 +89,15 @@ export default function Home() {
 
   const navigate = useNavigate();
 
+  function navigateToPage(link :string){
+
+    if (window.innerWidth < 720) {
+      setOpen(false);
+  } 
+ 
+    navigate(link);
+  }
+
 function LogOut(){
   localStorage.removeItem("user-info");
   window.location.href = "/";
@@ -173,7 +182,7 @@ React.useEffect(() => {
                 </ListItemIcon>
                 <ListItemText
                   primary={obj.Name}
-                  onClick={() => navigate(obj.Link)}
+                  onClick={() => navigateToPage(obj.Link)}
                 />
               </ListItemButton>
             </ListItem>
@@ -188,7 +197,7 @@ React.useEffect(() => {
             "Important updates",
           ].map((text, index) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton onClick={() => navigate("/LogoReview")}>
+              <ListItemButton onClick={() => navigateToPage("/LogoReview")}>
                 <ListItemIcon>
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>

@@ -47,6 +47,7 @@ class AppHelper {
       var currentUser = JSON.parse(
         localStorage.getItem("user-info") || " "
       );
+      console.log(currentUser);
       if (currentUser !== " ") {
         return currentUser;
       }

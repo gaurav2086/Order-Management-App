@@ -18,7 +18,7 @@ import { User } from "./Interface/User";
 import Backdrop from "@mui/material/Backdrop"; 
 import CircularProgress from "@mui/material/CircularProgress";
 import AlertBox from "./Component/CommonComponent/AlertBox";
-
+import AppHelper from "./Helper/AppHelper";
 
 function Copyright(props: any) {
   return (
@@ -103,8 +103,7 @@ export default function Login() {
     };
     fetch(apiUrl, requestOptions)
       .then((response) => response.json())
-      .then((data) => {
-        debugger;
+      .then((data) => {       
         if (data.errors === undefined) {
           localStorage.setItem("user-info", JSON.stringify(data));
           SaveUserInfo();
@@ -142,8 +141,7 @@ export default function Login() {
   }
 
   const useEffectCount = React.useRef(true);
-  React.useEffect(() => {
-    debugger;
+  React.useEffect(() => {   
     if (useEffectCount.current) {
       useEffectCount.current = false;
       if (localStorage.getItem("user-info") !== null) {
@@ -151,7 +149,7 @@ export default function Login() {
         if (currentUser !== " ") {
          setUserInfo(currentUser);
          setLogin(true);
-         //navigate("/UserList");
+         navigate("/OrderLIst");
         }
     }      
     }} , []);
