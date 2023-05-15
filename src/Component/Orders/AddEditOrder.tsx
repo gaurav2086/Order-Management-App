@@ -30,6 +30,7 @@ import LibraryAddRoundedIcon from "@mui/icons-material/LibraryAddRounded";
 import { AppSettings } from "../../AppSettings";
 import { Message } from "../../Interface/Message";
 import AlertBox from "../CommonComponent/AlertBox";
+import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 
 const theme = createTheme();
 
@@ -82,6 +83,23 @@ export default function AddEditOrder() {
 
   };
 
+  const removeProduct = () => {
+ if(products.length > 1)
+  { 
+     setProducts((products) => (products.slice(0, -1)));  
+
+     var amount =0;
+     for (let i = 0; i < (products.length-1); i++) {
+       let quantity = products[i].quantity;
+       let price = products[i].price;      
+       amount = amount + (quantity*price);
+     }
+ 
+   let  ordervalue = orderInfo;
+   ordervalue.amount = amount.toString(); //event.target.value;
+   setOrderInfo(ordervalue);
+  }
+  };
   
   const handleProductChange = (
     index: number,
@@ -485,7 +503,9 @@ export default function AddEditOrder() {
               </Grid>
               <Grid item xs={12} sm={12}   className="productAddCls">  <LibraryAddRoundedIcon
                 onClick={() => addProduct()}
-              ></LibraryAddRoundedIcon> </Grid> 
+              ></LibraryAddRoundedIcon>  <DisabledByDefaultIcon
+              onClick={() => removeProduct()}
+            ></DisabledByDefaultIcon> </Grid> 
 {/* Start */}
  {products.map((product, index) => (
      <Box
