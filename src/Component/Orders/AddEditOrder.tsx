@@ -88,11 +88,32 @@ export default function AddEditOrder() {
     event: { target: { name: any; value: any } }
   ) => {
     const updatedProducts = [...products];
+   if(event.target.name == "Price")
     updatedProducts[index] = { ...updatedProducts[index], price: +event.target.value };
+   
+    if(event.target.name == "Quantity")
+    updatedProducts[index] = { ...updatedProducts[index], quantity: +event.target.value };
+
     setProducts(updatedProducts);
-    
+    debugger;
+   
+    var amount =0;
+    for (let i = 0; i < products.length; i++) {
+      let quantity = products[i].quantity;
+      let price = products[i].price;
+      if(index == i){
+        if(event.target.name == "Price") 
+        price = event.target.value;
+        if(event.target.name == "Quantity") 
+        quantity = event.target.value;
+      
+      }
+      amount = amount + (quantity*price);
+    }
+
+
   let  ordervalue = orderInfo;
-  ordervalue.amount = event.target.value;
+  ordervalue.amount = amount.toString(); //event.target.value;
   setOrderInfo(ordervalue)  
 };
 
@@ -195,6 +216,7 @@ export default function AddEditOrder() {
         Type: "Error",
       };
       setAlertBoxmsg(msg);
+      return;
     }
 
     const requestOptions = {
@@ -491,14 +513,16 @@ export default function AddEditOrder() {
                 <TextField                 
                   id="quantity"
                   label="Quantity"
+                  name="Quantity"
                   value={product.quantity}
-                  onChange={(e) =>
-                    setProducts([
-                      ...products.slice(0, index),
-                      { ...product, quantity: +e.target.value },
-                      ...products.slice(index + 1),
-                    ])
-                  }
+                  onChange={(event) => handleProductChange(index, event)}
+                  // onChange={(e) =>
+                  //   setProducts([
+                  //     ...products.slice(0, index),
+                  //     { ...product, quantity: +e.target.value },
+                  //     ...products.slice(index + 1),
+                  //   ])
+                  // }
                   autoComplete="family-name"                 
                 /> 
               <TextField
@@ -506,6 +530,7 @@ export default function AddEditOrder() {
                                 fullWidth                              
                                 id="price"
                                 label="Price"
+                                name="Price"
                                 value={product.price}
                                 onChange={(event) => handleProductChange(index, event)}
                                 autoComplete="family-name"
