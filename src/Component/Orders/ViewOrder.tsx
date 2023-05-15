@@ -14,21 +14,38 @@ import AppHelper from "../../Helper/AppHelper";
 import { Container, CssBaseline } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+import { OrderProduct } from "../../Interface/OrderProduct";
+
 export default function ViewOrder() {
   const [pageName, setPageName] = React.useState("Add Order");
   const [orderInfo, setOrderInfo] = React.useState<Order>({
     id: 0,
     orderCode: "ORD_602_242023",
     address: "E 124, The Nest Assotch.",
-    details: "Order for 1000 pieces of Rose Gold Soap",
     customer: "Wipro",
-    contactPersonName: "Raj",
+    contactPerson: "Raj",
     contactPersonPhone: "+91-8445785425",
+    gst: "",
+    builtNumber: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    otherDetails: "Order for 1000 pieces of Rose Gold Soap",   
+    orderDueDate: "",
     orderStatus: "Delivered",
     amount: "100000 Rs",
+    amountReceived: "",
+    products: [{
+      id: 0,
+      productName: "",
+      quantity: 0,
+      price: 0
+    }],
     isActive: true,
-    tentativeDate: "12-03-2023",
-    createdBy: "Dev",
+    createDate: "",
+    createOrUpdateBy: "",
+    updateDate: ""
+     
   });
  
 
@@ -66,7 +83,7 @@ export default function ViewOrder() {
             Customer : {orderInfo.customer}
           </Typography>
           <Typography color="text.secondary" variant="body2">
-            Details: {orderInfo.details}
+            Details: {orderInfo.otherDetails}
           </Typography>
           <Typography color="text.secondary" variant="body2">
             Address: {orderInfo.address}
@@ -79,7 +96,7 @@ export default function ViewOrder() {
           </Typography>
         </Box>
         <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
-          <Button>{orderInfo.contactPersonName}</Button>
+          <Button>{orderInfo.contactPerson}</Button>
           <Button>{orderInfo.contactPersonPhone}</Button>
         </Box>
         <Button variant="outlined" onClick={() => navigate("/OrderList")}>

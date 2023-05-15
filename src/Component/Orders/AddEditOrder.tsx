@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 
 import LabelImportantIcon from "@mui/icons-material/LabelImportant";
 import { Order } from "../../Interface/Order";
+import { OrderProduct } from "../../Interface/OrderProduct";
 import AppHelper from "../../Helper/AppHelper";
 
 import LibraryAddRoundedIcon from "@mui/icons-material/LibraryAddRounded";
@@ -35,16 +36,31 @@ export default function AddEditOrder() {
     id: 0,
     orderCode: AppHelper.newOrderCode(),
     address: "",
-    details: "",
     customer: "",
-    contactPersonName: "",
+    contactPerson: "",
     contactPersonPhone: "",
+    gst: "",
+    builtNumber: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    otherDetails: "",
+    orderDueDate: "",
     orderStatus: "",
     amount: "",
+    amountReceived: "",
+    products: [{
+      id: 0,
+      productName: "",
+      quantity: 0,
+      price: 0
+    }],
     isActive: true,
-    tentativeDate: "",
-    createdBy: "",
+    createDate: "",
+    createOrUpdateBy: "",
+    updateDate: ""
   });
+  
   const [products, setProducts] = React.useState([
 
     { name: "", quantity: "", price: "" },
@@ -83,7 +99,10 @@ export default function AddEditOrder() {
     contactPersonPhone: false,
     orderStatus: false,
     amount: false,
-    tentativeDate: false,
+    orderDueDate: false,
+    city: false,
+    state: false,
+    zipCode: false,
   });
 
   const handleCheckboxChange = (event: {
@@ -107,12 +126,15 @@ export default function AddEditOrder() {
     let validate = {
       customer: AppHelper.isNullorEmpty(orderInfo.customer),
       address: AppHelper.isNullorEmpty(orderInfo.address),
-      details: AppHelper.isNullorEmpty(orderInfo.details),
-      contactPersonName: AppHelper.isNullorEmpty(orderInfo.contactPersonName),
+      details: AppHelper.isNullorEmpty(orderInfo.otherDetails),
+      contactPersonName: AppHelper.isNullorEmpty(orderInfo.contactPerson),
       contactPersonPhone: AppHelper.isNullorEmpty(orderInfo.contactPersonPhone),
       amount: AppHelper.isNullorEmpty(orderInfo.amount),
-      tentativeDate: AppHelper.isNullorEmpty(orderInfo.tentativeDate),
+      orderDueDate: AppHelper.isNullorEmpty(orderInfo.orderDueDate),
       orderStatus: AppHelper.isNullorEmpty(orderInfo.orderStatus),
+      city: AppHelper.isNullorEmpty(orderInfo.city),
+      state: AppHelper.isNullorEmpty(orderInfo.state),
+      zipCode: AppHelper.isNullorEmpty(orderInfo.zipCode),
     };
 
     if (itemID === "orderStatus") {
@@ -132,7 +154,10 @@ export default function AddEditOrder() {
       validate.contactPersonName ||
       validate.contactPersonPhone ||
       validate.orderStatus ||
-      validate.tentativeDate
+      validate.city ||
+      validate.state ||
+      validate.zipCode ||
+      validate.orderDueDate
     ) {
       return false;
     }
@@ -141,7 +166,7 @@ export default function AddEditOrder() {
   }
   const handleSubmit = () => {
     if (isValidForm("", "")) {
-      alert(orderInfo.tentativeDate);
+      alert(orderInfo.orderDueDate);
     }
   };
 
@@ -202,12 +227,12 @@ export default function AddEditOrder() {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  name="contactPersonName"
+                  name="contactPerson"
                   required
                   fullWidth
-                  id="contactPersonName"
+                  id="contactPerson"
                   label="Contact Person Name"
-                  value={orderInfo.contactPersonName}
+                  value={orderInfo.contactPerson}
                   error={formValidation.contactPersonName}
                   onChange={(e) => handleInputChange(e)}
                   helperText={
@@ -253,26 +278,54 @@ export default function AddEditOrder() {
                   autoFocus
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <TextField
                   required
                   fullWidth
                   id="city"
                   label="City"
+                  value={orderInfo.city}
+                  error={formValidation.city}
                   onChange={(e) => handleInputChange(e)}
-                  name="City"
-                  autoComplete="family-name"
+                  helperText={
+                    formValidation.city
+                      ? "Error : Field is required"
+                      : ""
+                  }
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <TextField
                   name="state"
                   required
                   fullWidth
                   id="state"
                   label="State"                 
-                  onChange={(e) => handleInputChange(e)}                
-                  autoFocus
+                  value={orderInfo.state}
+                  error={formValidation.state}
+                  onChange={(e) => handleInputChange(e)}
+                  helperText={
+                    formValidation.state
+                      ? "Error : Field is required"
+                      : ""
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  name="zipCode"
+                  required
+                  fullWidth
+                  id="zipCode"
+                  label="Zip Code"                 
+                  value={orderInfo.zipCode}
+                  error={formValidation.zipCode}
+                  onChange={(e) => handleInputChange(e)}
+                  helperText={
+                    formValidation.zipCode
+                      ? "Error : Field is required"
+                      : ""
+                  }
                 />
               </Grid>
               <Grid item xs={12}>
@@ -358,11 +411,11 @@ export default function AddEditOrder() {
               </Grid>
               <Grid item xs={12} sm={4}>
                 <TextField
-                  name="BuildNumber"
+                  name="BuiltNumber"
                   required
                   fullWidth
                   id="build_number"
-                  label="Build Number"                 
+                  label="Built Number"                 
                   onChange={(e) => handleInputChange(e)}                
                   autoFocus
                 />
@@ -389,12 +442,9 @@ export default function AddEditOrder() {
                   fullWidth
                   id="amountReceived"
                   label="Amount Received"
-                  value={orderInfo.amount}
+                  value={orderInfo.amountReceived}
                   error={formValidation.amount}
-                  onChange={(e) => handleInputChange(e)}
-                  helperText={
-                    formValidation.amount ? "Error : Field is required" : ""
-                  }
+                  onChange={(e) => handleInputChange(e)}             
                   autoFocus
                 />
               </Grid>
@@ -437,14 +487,14 @@ export default function AddEditOrder() {
                 <TextField
                   required
                   fullWidth
-                  id="tentativeDate"
-                  name="tentativeDate"
+                  id="orderDueDate"
+                  name="orderDueDate"
                   type="Date"
-                  value={orderInfo.tentativeDate}
+                  value={orderInfo.orderDueDate}
                   onChange={(e) => handleInputChange(e)}
-                  error={formValidation.tentativeDate}
+                  error={formValidation.orderDueDate}
                   helperText={
-                    formValidation.tentativeDate
+                    formValidation.orderDueDate
                       ? "Error : Field is required"
                       : ""
                   }
