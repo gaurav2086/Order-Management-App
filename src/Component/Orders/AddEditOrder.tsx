@@ -27,11 +27,19 @@ import { OrderProduct } from "../../Interface/OrderProduct";
 import AppHelper from "../../Helper/AppHelper";
 
 import LibraryAddRoundedIcon from "@mui/icons-material/LibraryAddRounded";
+import { AppSettings } from "../../AppSettings";
+import { Message } from "../../Interface/Message";
+import AlertBox from "../CommonComponent/AlertBox";
 
 const theme = createTheme();
 
 export default function AddEditOrder() {
+  const [openLoader, setOpenloader] = React.useState(false);
   const [pageName, setPageName] = React.useState("Add Order");
+  const [alertBoxmsg, setAlertBoxmsg] = React.useState<Message>({
+    Type: "",
+    Text: "",
+  });
   const [orderInfo, setOrderInfo] = React.useState<Order>({
     id: 0,
     orderCode: AppHelper.newOrderCode(),
@@ -63,14 +71,14 @@ export default function AddEditOrder() {
   
   const [products, setProducts] = React.useState([
 
-    { name: "", quantity: "", price: "" },
+    { id:0 ,productName: "", quantity: 0, price: 0 },
 
   ]);
 
   
   const addProduct = () => {
 
-    setProducts([...products, { name: "", quantity: "", price: "" }]);
+    setProducts([...products, { id:0 ,productName: "", quantity: 0, price: 0 }]);
 
   };
 
@@ -80,7 +88,7 @@ export default function AddEditOrder() {
     event: { target: { name: any; value: any } }
   ) => {
     const updatedProducts = [...products];
-    updatedProducts[index] = { ...updatedProducts[index], price: event.target.value };
+    updatedProducts[index] = { ...updatedProducts[index], price: +event.target.value };
     setProducts(updatedProducts);
     
   let  ordervalue = orderInfo;
@@ -165,10 +173,112 @@ export default function AddEditOrder() {
     return true;
   }
   const handleSubmit = () => {
-    if (isValidForm("", "")) {
-      alert(orderInfo.orderDueDate);
+   debugger;
+    setOpenloader(true);
+
+    if (!isValidForm("", "")) {
+      setOpenloader(false);
+      return false;
     }
-  };
+
+    let apiUrl = "";
+    if (pageName === "Add Order") {
+      apiUrl = AppSettings.API_URL + "Order/AddOrder";
+    } else {
+      apiUrl = AppSettings.API_URL + "Order/UpdateOrder";
+    }   
+
+        
+    if(products == null || products[0].productName == ''){
+      let msg: Message = {
+        Text: "kindly add the product details.",
+        Type: "Error",
+      };
+      setAlertBoxmsg(msg);
+    }
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + AppHelper.getUser().token,
+      },
+      body: JSON.stringify({  
+        orderCode: orderInfo.orderCode, 
+        customer : orderInfo.customer,
+        contactPerson : orderInfo.contactPerson,
+        contactPersonPhone: orderInfo.contactPersonPhone,
+        gst: orderInfo.gst,
+        builtNumber: orderInfo.builtNumber,
+        address: orderInfo.address,
+        city: orderInfo.city,
+        state: orderInfo.state,
+        zipCode: orderInfo.zipCode,
+        otherDetails: orderInfo.otherDetails,
+        orderDueDate: orderInfo.orderDueDate,
+        orderStatus: orderInfo.orderStatus,
+        amount: orderInfo.amount,
+        amountReceived: orderInfo.amountReceived,
+        isActive: isChecked,
+        createOrUpdateBy: AppHelper.getUser().username,
+        createDate: "2023-05-15T13:09:41.168Z",        
+        products : products
+      }),};
+   
+      fetch(apiUrl, requestOptions)
+      .then((response) => {
+        console.log(response);
+        if (!response.ok) {
+          throw new Error(
+            `API Error, This is an HTTP error: The status is ${response.status}`
+          );
+        }
+        return response.json();
+      })
+      .then(
+        (data) => {
+          debugger;
+          if(data.successes.length>0){
+          let msg: Message = {
+            Text: "Order Added Successfully!",
+            Type: "Success",
+          };
+          setAlertBoxmsg(msg);}
+          else{ let msg: Message = {
+            Text: "Something went wrong please try again.",
+            Type: "Error",
+          }; setAlertBoxmsg(msg);}      
+          
+          window.scrollTo(0, 0);
+ 
+        },
+        (error) => {
+          setOpenloader(false);
+          let msg: Message = {
+            Text: "Something went wrong please try again.",
+            Type: "Error",
+          };
+          setAlertBoxmsg(msg);
+          console.log("API Error: " + apiUrl + " " + error);
+        }
+       
+      )
+      .catch((err) => {
+        if (err.message === "Failed to fetch") {
+          navigate("/SessionExpired");
+        } else {
+          //API Error.
+          let msgError: Message = {
+            Text: err.message,
+            Type: "Error",
+          };
+          setAlertBoxmsg(msgError);
+        }
+      })
+      .finally(() => {
+        setOpenloader(false);
+      });   
+    };
 
   const navigate = useNavigate();
 
@@ -181,6 +291,11 @@ export default function AddEditOrder() {
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="md">
         <CssBaseline />
+        {alertBoxmsg.Text !== "" && (
+          <div className="msgDivNew">
+            <AlertBox value={alertBoxmsg}></AlertBox>{" "}
+          </div>
+        )}
         <Box
           sx={{
             marginTop: 5,
@@ -191,7 +306,7 @@ export default function AddEditOrder() {
         >
           <Typography component="h1" variant="h5">
             {pageName}
-          </Typography>
+          </Typography>         
           <Box component="form" noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -332,10 +447,11 @@ export default function AddEditOrder() {
                 <TextField
                   required
                   fullWidth
-                  id="details"
+                  id="otherDetails"
                   multiline
                   rows={2}
                   label="Product Details"
+                  value={orderInfo.otherDetails}
                   onChange={(e) => handleInputChange(e)}
                   name="details"
                   error={formValidation.details}
@@ -361,11 +477,11 @@ export default function AddEditOrder() {
                 <TextField                             
                   id="product"
                   label="Product"
-                  value={product.name || ""}
+                  value={product.productName || ""}
                   onChange={(e) =>
                     setProducts([
                       ...products.slice(0, index),
-                      { ...product, name: e.target.value },
+                      { ...product, productName: e.target.value },
                       ...products.slice(index + 1),
                     ])
                   }
@@ -379,7 +495,7 @@ export default function AddEditOrder() {
                   onChange={(e) =>
                     setProducts([
                       ...products.slice(0, index),
-                      { ...product, quantity: e.target.value },
+                      { ...product, quantity: +e.target.value },
                       ...products.slice(index + 1),
                     ])
                   }
